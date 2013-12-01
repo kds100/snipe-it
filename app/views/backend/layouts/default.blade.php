@@ -197,6 +197,12 @@
                     <span>Reports</span>
                 </a>
             </li>
+            <li{{ (Request::is('calendar*') ? ' class="active"><div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>' : '>') }}
+                <a href="{{ URL::to('calendar') }}">
+                    <i class="icon-calendar"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
         </ul>
     </div>
     <!-- end sidebar -->
@@ -213,7 +219,7 @@
                 <div class="col-md-3 col-sm-3 stat">
                     <div class="data">
                             <a href="{{ URL::to('hardware') }}">
-                            	<span class="number">{{ number_format(Asset::assetcount()) }}</span>
+                            	<span class="number">{{-- number_format(Asset::assetcount()) --}}</span>
                            	 	<span style="color:black">total assets</span>
                             </a>
                         </div>
@@ -221,7 +227,7 @@
                     <div class="col-md-3 col-sm-3 stat">
                         <div class="data">
                             <a href="{{ URL::to('hardware?RTD=true') }}">
-                            	<span class="number">{{ number_format(Asset::availassetcount()) }}</span>
+                            	<span class="number">{{-- number_format(Asset::availassetcount()) --}}</span>
                             	<span style="color:black">assets available</span>
                             </a>
                         </div>
@@ -229,7 +235,7 @@
                     <div class="col-md-3 col-sm-3 stat">
                         <div class="data">
                             <a href="{{ URL::to('admin/licenses') }}">
-                            	<span class="number">{{ number_format(License::assetcount()) }}</span>
+                            	<span class="number">{{-- number_format(License::assetcount()) --}}</span>
                             	<span style="color:black">total licenses</span>
                             </a>
                         </div>
@@ -237,7 +243,7 @@
                     <div class="col-md-3 col-sm-3 stat last">
                         <div class="data">
                         	<a href="{{ URL::to('admin/licenses') }}">
-                            	<span class="number">{{ number_format(License::availassetcount()) }}</span>
+                            	<span class="number">{{-- number_format(License::availassetcount()) --}}</span>
                             	<span style="color:black">licenses available</span>
                             </a>
                         </div>
@@ -279,11 +285,14 @@
     <script src="//code.jquery.com/jquery-latest.js"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.knob.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui-1.10.2.custom.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.uniform.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.datepicker.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('assets/js/theme.js') }}"></script>
+
+
 
     <script type="text/javascript">
         $(function () {
@@ -357,7 +366,54 @@
 
  </script>
 
+<script src="{{ asset('assets/js/fullcalendar.min.js') }}"></script>
 
+<!-- builds fullcalendar example -->
+    <script>
+        $(document).ready(function() {
+
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'month,agendaWeek,agendaDay',
+                    center: 'title',
+                    right: 'today prev,next'
+                },
+                selectable: true,
+                selectHelper: true,
+                editable: true,
+                events: [
+                    {
+                        title: 'All Day Event',
+                        start: new Date(y, m, 1)
+                    },
+                    {
+                        title: 'Long Event',
+                        start: new Date(y, m, d-5),
+                        end: new Date(y, m, d-2)
+                    },
+
+                    {
+                        title: 'Warranty Expires',
+                        start: new Date(y, m, 28),
+                        end: new Date(y, m, 29),
+                        url: '/'
+                    }
+                ],
+                eventBackgroundColor: '#278ccf'
+            });
+
+            // handler to close the new event popup just for displaying purposes
+            // more documentation for fullcalendar on http://arshaw.com/fullcalendar/
+            $(".popup .close-pop").click(function () {
+                $(".new-event").fadeOut("fast");
+            });
+        });
+    </script>
 
 
 

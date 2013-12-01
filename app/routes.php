@@ -48,6 +48,11 @@ Route::group(array('prefix' => 'hardware'), function()
 
 });
 
+Route::group(array('prefix' => 'calendar'), function()
+{
+	Route::get('/', array('as' => 'calendar', 'uses' => 'Controllers\Admin\CalendarController@getIndex'));
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +82,7 @@ Route::group(array('prefix' => 'admin'), function()
 		Route::post('{licenseId}/checkin', 'Controllers\Admin\LicensesController@postCheckin');
 		Route::get('{licenseId}/view', array('as' => 'view/license', 'uses' => 'Controllers\Admin\LicensesController@getView'));
 	});
+
 
 
 	# Admin Settings Routes (for categories, maufactureres, etc)
@@ -145,7 +151,6 @@ Route::group(array('prefix' => 'admin'), function()
 			Route::post('{statuslabelId}/edit', 'Controllers\Admin\StatuslabelsController@postEdit');
 			Route::get('{statuslabelId}/delete', array('as' => 'delete/statuslabel', 'uses' => 'Controllers\Admin\StatuslabelsController@getDelete'));
 		});
-
 
 	});
 
@@ -245,6 +250,7 @@ Route::group(array('prefix' => 'account'), function()
 	Route::post('change-email', 'Controllers\Account\ChangeEmailController@postIndex');
 
 });
+
 
 /*
 |--------------------------------------------------------------------------
