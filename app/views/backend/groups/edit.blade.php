@@ -12,7 +12,7 @@ Group Update ::
 
 <div class="row header">
     <div class="col-md-12">
-			<a href="{{ URL::previous() }}" class="btn btn-flat gray pull-right"><i class="icon-circle-arrow-left icon-white"></i> Back</a>
+			<a href="{{ route('groups') }}" class="btn btn-flat gray pull-right"><i class="icon-circle-arrow-left icon-white"></i> Back</a>
 		<h3>@lang('admin/groups/titles.edit_group')</h3>
 	</div>
 </div>

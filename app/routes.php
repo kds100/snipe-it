@@ -9,6 +9,9 @@
 |
 */
 
+
+
+
 Route::group(array('prefix' => 'hardware'), function()
 {
 
@@ -130,6 +133,28 @@ Route::group(array('prefix' => 'admin'), function()
 			Route::post('{locationId}/edit', 'Controllers\Admin\LocationsController@postEdit');
 			Route::get('{locationId}/delete', array('as' => 'delete/location', 'uses' => 'Controllers\Admin\LocationsController@getDelete'));
 		});
+
+        # Buildings
+        Route::group(array('prefix' => 'buildings'), function()
+        {
+            Route::get('/', array('as' => 'buildings', 'uses' => 'Controllers\Admin\BuildingsController@getIndex'));
+            Route::get('create', array('as' => 'create/building', 'uses' => 'Controllers\Admin\BuildingsController@getCreate'));
+            Route::post('create', 'Controllers\Admin\BuildingsController@postCreate');
+            Route::get('{buildingId}/edit', array('as' => 'update/building', 'uses' => 'Controllers\Admin\BuildingsController@getEdit'));
+            Route::post('{buildingId}/edit', 'Controllers\Admin\BuildingsController@postEdit');
+            Route::get('{buildingId}/delete', array('as' => 'delete/building', 'uses' => 'Controllers\Admin\BuildingsController@getDelete'));
+        });
+
+        # Rooms
+        Route::group(array('prefix' => 'rooms'), function()
+        {
+            Route::get('/', array('as' => 'rooms', 'uses' => 'Controllers\Admin\RoomsController@getIndex'));
+            Route::get('create', array('as' => 'create/room', 'uses' => 'Controllers\Admin\RoomsController@getCreate'));
+            Route::post('create', 'Controllers\Admin\RoomsController@postCreate');
+            Route::get('{roomId}/edit', array('as' => 'update/room', 'uses' => 'Controllers\Admin\RoomsController@getEdit'));
+            Route::post('{roomId}/edit', 'Controllers\Admin\RoomsController@postEdit');
+            Route::get('{roomId}/delete', array('as' => 'delete/room', 'uses' => 'Controllers\Admin\RoomsController@getDelete'));
+        });
 
 		# Status Labels
 		Route::group(array('prefix' => 'statuslabels'), function()
@@ -255,12 +280,31 @@ Route::group(array('prefix' => 'account'), function()
 |
 */
 
+// Route Specifically for Drop Down List interaction
+Route::get('api/dropdown', function(){
+    $id = Input::get('option');
+    $buildings = Location::find($id)->buildings;
+    return $buildings->lists('name', 'id');
+});
+
+// Route Specifically for Drop Down List interaction
+Route::get('api/dropdownRM', function(){
+    $id = Input::get('option');
+    $rooms = Building::find($id)->rooms;
+    return $rooms->lists('name', 'id');
+});
 
 // Redirect requests to / to the hardware section until we get a fancy dashboard set up
 Route::get('/', function()
 {
     return Redirect::to('hardware');
 });
+
+// Explain this further
 Route::get('/', array('as' => 'home', 'uses' => 'Controllers\Admin\AssetsController@getIndex'));
+// Reporting Routes, expand into a list of report options
 Route::get('reports', array('as' => 'reports', 'uses' => 'Controllers\Admin\AssetsController@getReports'));
 Route::get('reports/export', array('as' => 'reports/export', 'uses' => 'Controllers\Admin\AssetsController@exportReports'));
+
+// Humor
+Route::get('humor', array('as' => 'humor', 'uses' => 'Controllers\HumorController@getIndex'));

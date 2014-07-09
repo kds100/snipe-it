@@ -27,16 +27,30 @@ return array(
 
 	'locale' => 'en',
 
-	/*
+    /*
 	|--------------------------------------------------------------------------
-	| Autoloaded Service Providers
+	| Application Debug Mode
 	|--------------------------------------------------------------------------
 	|
-	| The service providers listed here will be automatically loaded on the
-	| request to your application. Feel free to add your own services to
-	| this array to grant expanded functionality to your applications.
+	| When your application is in debug mode, detailed error messages with
+	| stack traces will be shown on every error that occurs within your
+	| application. If disabled, a simple generic error page is shown.
 	|
 	*/
+
+    'debug' => false,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Autoloaded Service Providers
+    |--------------------------------------------------------------------------
+    |
+    | The service providers listed here will be automatically loaded on the
+    | request to your application. Feel free to add your own services to
+    | this array to grant expanded functionality to your applications.
+    |
+    */
 
 
 	'providers' => array(

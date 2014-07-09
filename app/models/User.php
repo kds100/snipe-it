@@ -74,4 +74,12 @@ class User extends SentryUserModel {
   		return $this->belongsTo('User','manager_id')->withTrashed();
   	}
 
+    /**
+     * Get the user's GROUP based on the assigned user
+     **/
+    //todo First added User function
+    public function group()
+    {
+        return $this->belongsTo('User','group_id')->withTrashed();
+    }
 }

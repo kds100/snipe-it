@@ -93,10 +93,12 @@ View Asset {{ $asset->asset_tag }} ::
 			<thead>
 				<tr>
 					<th class="col-md-1"></th>
-					<th class="col-md-3"><span class="line"></span>Date</th>
-					<th class="col-md-2"><span class="line"></span>Admin</th>
+					<th class="col-md-3"><span class="line"></span>Date / Time</th>
+<!--					<th class="col-md-2"><span class="line"></span>Admin</th>-->
 					<th class="col-md-2"><span class="line"></span>Action</th>
 					<th class="col-md-2"><span class="line"></span>User</th>
+                    <!-- Added - Due Date-->
+                    <th class="col-md-2"><span class="line"></span>Return</th>
 					<th class="col-md-3"><span class="line"></span>Note</th>
 				</tr>
 			</thead>
@@ -110,11 +112,11 @@ View Asset {{ $asset->asset_tag }} ::
 					@endif
 					</td>
 					<td>{{ $log->added_on }}</td>
-					<td>
-						@if (isset($log->user_id))
-						{{ $log->adminlog->fullName() }}
-						@endif
-					</td>
+<!--					<td>-->
+<!--						@if (isset($log->user_id))-->
+<!--						{{ $log->adminlog->fullName() }}-->
+<!--						@endif-->
+<!--					</td>-->
 					<td>{{ $log->action_type }}</td>
 					<td>
 						@if (isset($log->checkedout_to))
@@ -123,6 +125,8 @@ View Asset {{ $asset->asset_tag }} ::
 						</a>
 						@endif
 					</td>
+                    <!-- Added - Due Date                -->
+                    <td>{{ $log->due_at }}</td>
 					<td>
 						@if ($log->note)
 						{{ $log->note }}

@@ -321,7 +321,10 @@ class UsersController extends AdminController {
 				$user->removeGroup($group);
 			}
 
-			// Was the user updated?
+            //@todo Error thrown for User Update
+            //SQLSTATE[HY000]: General error: 1366 Incorrect integer value: '' for column 'manager_id' at row 1 (SQL: update `users` set `permissions` = {"admin":1,"user":1,"superuser":-1}, `activated` = 1, `updated_at` = 2014-06-16 13:24:26, `location_id` = 1, `phone` = , `jobtitle` = , `manager_id` = where `id` = 1)
+
+            // Was the user updated?
 			if ($user->save())
 			{
 				// Prepare the success message

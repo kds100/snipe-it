@@ -79,6 +79,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <!-- Added Smith College Logo temporarily, place into Config settings -->
+            <img class="navbar-header" src="{{asset('assets/logosmallest.gif')}}">
             <a class="navbar-brand" href="/">{{ Setting::getSettings()->site_name }}</a>
         </div>
 
@@ -166,6 +168,18 @@
 								<i class="icon-globe"></i> @lang('general.locations')
 							</a>
 						</li>
+                        <!-- Added - Buildings -->
+                        <li{{ (Request::is('admin/settings/buildings*') ? ' class="active"' : '') }}>
+                        <a href="{{ URL::to('admin/settings/buildings') }}">
+                            <i class="icon-building"></i> @lang('general.buildings')
+                        </a>
+                        </li>
+                        <!-- Added - Rooms -->
+                        <li{{ (Request::is('admin/settings/rooms*') ? ' class="active"' : '') }}>
+                        <a href="{{ URL::to('admin/settings/rooms') }}">
+                            <i class="icon-th-large"></i> @lang('general.rooms')
+                        </a>
+                        </li>
 						<li{{ (Request::is('admin/settings/depreciations*') ? ' class="active"' : '') }}>
 							<a href="{{ URL::to('admin/settings/depreciations') }}">
 								<i class="icon-arrow-down"></i> @lang('general.depreciation')
@@ -224,6 +238,12 @@
                     <i class="icon-signal"></i>
                     <span>@lang('general.reports')</span>
                 </a>
+            </li>
+            <li{{ (Request::is('comics*') ? ' class="active"><div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>' : '>') }}
+            <a href="{{ URL::to('humor') }}">
+                <i class="icon-smile"></i>
+                <span>Daily Humor</span>
+            </a>
             </li>
         </ul>
     </div>
@@ -293,8 +313,9 @@
 	<footer>
         <div id="footer">
       		<div class="container">
-        		<p class="muted credit"><a href="http://snipeitapp.com">Snipe IT</a> is a free open source
-        		project by <a href="http://twitter.com/snipeyhead">@snipeyhead</a>. <a href="https://github.com/snipe/snipe-it">Fork it here</a>!</p>
+        		<p class="muted credit">
+                    Asset Tracking, a project by Keith Streeter for <a href="http://smith.edu">Smith College</a>
+                    based on <a href="http://snipeitapp.com">Snipe IT</a></p>
       		</div>
         </div>
 	</footer>

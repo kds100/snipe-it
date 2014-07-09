@@ -19,6 +19,8 @@ use View;
 use Response;
 use Config;
 use Location;
+use Building;
+use Room;
 use Log;
 
 use BaconQrCode\Renderer\Image as QrImage;
@@ -56,7 +58,10 @@ class AssetsController extends AdminController {
 		}
 		else
 		{
-			$assets = Asset::orderBy('asset_tag', 'ASC')->where('physical', '=', 1)->get();
+            // ADDED Eager Loading params for Model, Assigned User, Asset Location - decreases load time significantly
+            // Note the addition of AssetsStatus to complete the loading improvement.
+            // Debug Mode still has overhead, but much more manageable
+			$assets = Asset::with('model','assigneduser','assetloc','assetstatus')->orderBy('asset_tag', 'ASC')->where('physical', '=', 1)->get();
 		}
 
 		// Paginate the users
@@ -164,7 +169,13 @@ class AssetsController extends AdminController {
 		// Grab the dropdown list of status
 		$statuslabel_list = array('' => Lang::get('general.pending')) + array('0' => Lang::get('general.ready_to_deploy')) + Statuslabel::orderBy('name', 'asc')->lists('name', 'id');
 
-		return View::make('backend/hardware/edit')->with('model_list',$model_list)->with('statuslabel_list',$statuslabel_list)->with('asset',new Asset);
+        // Included List of Locations/Buildings/Rooms for given Asset
+        $location_list = array('' => '') + Location::orderBy('name', 'asc')->lists('name', 'id');
+        $building_list = array('' => '') + Building::orderBy('name', 'asc')->lists('name', 'id');
+        $room_list = array('' => '') + Room::orderBy('name', 'asc')->lists('name', 'id');
+
+        return View::make('backend/hardware/edit')->with('model_list',$model_list)->with('statuslabel_list',$statuslabel_list)
+            ->with('location_list',$location_list)->with('building_list',$building_list)->with('room_list',$room_list)->with('asset',new Asset);
 
 	}
 
@@ -266,7 +277,13 @@ class AssetsController extends AdminController {
 		// Grab the dropdown list of status
 		$statuslabel_list = array('' => Lang::get('general.pending')) + array('0' => Lang::get('general.ready_to_deploy')) + Statuslabel::orderBy('name', 'asc')->lists('name', 'id');
 
-		return View::make('backend/hardware/edit', compact('asset'))->with('model_list',$model_list)->with('statuslabel_list',$statuslabel_list);
+        // Included List of Locations/Buildings/Rooms for given Asset
+        $location_list = array('' => '') + Location::orderBy('name', 'asc')->lists('name', 'id');
+        $building_list = array('' => '') + Building::orderBy('name', 'asc')->lists('name', 'id');
+        $room_list = array('' => '') + Room::orderBy('name', 'asc')->lists('name', 'id');
+
+		return View::make('backend/hardware/edit', compact('asset'))->with('model_list',$model_list)->with('statuslabel_list',$statuslabel_list)
+                        ->with('location_list',$location_list)->with('building_list',$building_list)->with('room_list',$room_list);
 	}
 
 
@@ -339,6 +356,25 @@ class AssetsController extends AdminController {
 			$asset->asset_tag           	= e(Input::get('asset_tag'));
 			$asset->notes            		= e(Input::get('notes'));
 			$asset->physical            		= '1';
+            // Additional Location / Building / Room Data
+        if (e(Input::get('location_id')) == '') {
+            $asset->location_id =  NULL;
+        } else {
+            $asset->location_id        = e(Input::get('location_id'));
+        }
+        if (e(Input::get('building_id')) == '') {
+            $asset->building_id =  NULL;
+        } else {
+            $asset->building_id        = e(Input::get('building_id'));
+        }
+        if (e(Input::get('room_id')) == '') {
+            $asset->room_id =  NULL;
+        } else {
+            $asset->room_id        = e(Input::get('room_id'));
+        }
+            //$asset->location_id           		= e(Input::get('location_id'));
+            //$asset->building_id           		= e(Input::get('building_id'));
+            //$asset->room_id           		    = e(Input::get('room_id'));
 
 			// Was the asset updated?
 			if($asset->save())
@@ -419,6 +455,7 @@ class AssetsController extends AdminController {
 
 
 		// Declare the rules for the form validation
+        //@todo Is this the Update for Checkout Asset_log table??
 		$rules = array(
 			'assigned_to'   => 'required|min:1',
 			'note'   => 'alpha_space',
@@ -455,6 +492,7 @@ class AssetsController extends AdminController {
 			$logaction->location_id = $assigned_to->location_id;
 			$logaction->user_id = Sentry::getUser()->id;
 			$logaction->note = e(Input::get('note'));
+            $logaction->due_at = e(Input::get('due_at'));
 			$log = $logaction->logaction('checkout');
 
 			// Redirect to the new asset page

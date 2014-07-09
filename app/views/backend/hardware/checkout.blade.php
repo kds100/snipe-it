@@ -3,9 +3,9 @@
 {{-- Page title --}}
 @section('title')
 	@if ($asset->id)
-	Checkout Asset to User::
+	    Checkout Asset <!-- Checkout Asset to User::-->
 	@else
-	Checkout Asset to User ::
+        Create Asset   <!--	Checkout Asset to User ::-->
 	@endif
 @parent
 @stop
@@ -49,8 +49,8 @@
 				  <p class="form-control-static">{{ $asset->name }}</p>
 				</div>
 		  	</div>
-			<!-- User -->
 
+			<!-- User -->
 			<div class="form-group {{ $errors->has('assigned_to') ? ' has-error' : '' }}">
 				<label for="assigned_to" class="col-md-2 control-label">Checkout to</label>
 				<div class="col-md-7">
@@ -67,6 +67,15 @@
 					{{ $errors->first('note', '<span class="alert-msg"><i class="icon-remove-sign"></i> :message</span>') }}
 				</div>
 			</div>
+
+            <!-- Add Due Date (located in Asset_Logs (attempting to track how this completes the update -->
+            <div class="form-group {{ $errors->has('note') ? 'error' : '' }}">
+                <label for="due_at" class="col-md-2 control-label">Return By Date</label>
+                <div class="col-md-7">
+                    <input class="col-md-6 form-control" type="date" name="due_at" id="due_at" value="{{ Input::old('due_at', $asset->due_at) }}" />
+                    {{ $errors->first('due_at', '<span class="alert-msg"><i class="icon-remove-sign"></i> :message</span>') }}
+                </div>
+            </div>
 
 			<!-- Form actions -->
 			<div class="form-group">

@@ -38,7 +38,7 @@ User Management ::
 		<tr role="row">
 			<th class="col-md-3">@lang('admin/users/table.name')</th>
 			<th class="col-md-2">@lang('admin/users/table.email')</th>
-			<th class="col-md-2">Manager</th>
+			<th class="col-md-2">GPManager</th>
 			<th class="col-md-1">Assets</th>
 			<th class="col-md-1">Licenses</th>
 			<th class="col-md-1">@lang('admin/users/table.activated')</th>
@@ -50,9 +50,8 @@ User Management ::
 		@foreach ($users as $user)
 		<tr>
 			<td>
-			<img src="{{ $user->gravatar() }}" class="img-circle avatar hidden-phone" style="max-width: 45px;" />
-			<a href="{{ route('view/user', $user->id) }}" class="name">{{ $user->fullName() }}</a>
-
+			    <img src="{{ $user->gravatar() }}" class="img-circle avatar hidden-phone" style="max-width: 45px;" />
+			    <a href="{{ route('view/user', $user->id) }}" class="name">{{ $user->fullName() }}</a>
 			</td>
 			<td>{{ $user->email }}</td>
 			<td>

@@ -35,6 +35,8 @@ return array(
 	'manufacturers'			=> 'Manufacturers',
 	'categories'			=> 'Categories',
 	'locations'				=> 'Locations',
+    'buildings'             => 'Buildings',
+    'rooms'                 => 'Rooms',
 	'depreciation'			=> 'Depreciation',
 	'sign_in'				=> 'Sign in',
 	'deployed'				=> 'Deployed',

@@ -16,5 +16,6 @@ return array(
 	'eol' 			=> 'EOL',
 	'diff' 			=> 'Diff',
 	'dl_csv' 		=> 'Download CSV',
+    'name'          => 'Asset Name',
 
 );

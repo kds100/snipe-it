@@ -20,4 +20,8 @@ class Location extends Elegant {
 		return $this->hasMany('User', 'location_id')->count();
 	}
 
+    // Link the Buildings for this Location - Drop down list
+    public function buildings(){
+        return $this->hasMany('Building');
+    }
 }

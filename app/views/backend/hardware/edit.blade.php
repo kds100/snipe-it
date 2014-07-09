@@ -130,6 +130,31 @@
 				</div>
 			</div>
 
+            <!-- Location / Building / Room Linked   -->
+            <div class="form-group {{ $errors->has('location_id') ? ' has-error' : '' }}">
+                <label for="location_id" class="col-md-2 control-label">Location</label>
+                <div class="col-md-7">
+                    {{ Form::select('location_id', $location_list , Input::old('location_id', $asset->location_id), array('id'=>'location_id','class'=>'select2', 'style'=>'width:350px')) }}
+                    {{ $errors->first('location_id', '<span class="alert-msg"><i class="icon-remove-sign"></i> :message</span>') }}
+                </div>
+            </div>
+
+            <div class="form-group {{ $errors->has('building_id') ? ' has-error' : '' }}">
+                <label for="building_id" class="col-md-2 control-label">Building</label>
+                <div class="col-md-7">
+                    {{ Form::select('building_id', $building_list , Input::old('building_id', $asset->building_id), array('id'=>'building_id','class'=>'select2', 'style'=>'width:350px')) }}
+                    {{ $errors->first('building_id', '<span class="alert-msg"><i class="icon-remove-sign"></i> :message</span>') }}
+                </div>
+            </div>
+
+            <div class="form-group {{ $errors->has('room_id') ? ' has-error' : '' }}">
+                <label for="room_id" class="col-md-2 control-label">Room</label>
+                <div class="col-md-7">
+                    {{ Form::select('room_id', $room_list , Input::old('room_id', $asset->room_id), array('id'=>'room_id','class'=>'select2', 'style'=>'width:350px')) }}
+                    {{ $errors->first('room_id', '<span class="alert-msg"><i class="icon-remove-sign"></i> :message</span>') }}
+                </div>
+            </div>
+
 			<!-- Form actions -->
 				<div class="form-group">
 				<label class="col-md-2 control-label"></label>
@@ -142,4 +167,92 @@
 		</form>
 	</div>
 </div>
+
+<script type="text/javascript">
+    // Hook functions at the load of the page to link the three drop downs
+    // together for Location / Building / Room
+    //
+    // Must control the link, alter selections automatically when user
+    // makes a selection so that proper lists fill the other lists
+    jQuery(document).ready(function($){
+        // LOCATION is Set, Create a list of matching Buildings
+        if($('#location_id').val() > 0){
+            // If a pre-saved Location exists, Set Building list to match
+            $.get("{{ url('api/dropdown')}}",
+                { option: $('#location_id').val() },
+                function(data) {
+                    $('#building_id').empty();
+                    //alert('Setting Building List');
+                    $.each(data, function(key, element) {
+                        $('#building_id').append("<option value='" + key +"'>" + element + "</option>");
+                    });
+                });
+        }
+//alert($('#building_id').val());
+        // BUILDING is Set, Create a list of matching Rooms
+        if($('#building_id').val() > 0){
+            // If a pre-saved Location exists, Set Room list to match
+            $.get("{{ url('api/dropdown')}}",
+                { option: $('#building_id').val() },
+                function(data) {
+                    $('#room_id').empty();
+                    alert('Setting Room list');
+                    $.each(data, function(key, element) {
+                        $('#room_id').append("<option value='" + key +"'>" + element + "</option>");
+                    });
+                });
+        }
+
+        // Set up the Select Change (Location) to update Buildings List
+        $('#location_id').change(function(){
+            $.get("{{ url('api/dropdown')}}",
+                { option: $(this).val() },
+                function(data) {
+                    // Empty the Building List, fill with list belonging to selected Location
+                    $('#building_id').empty();
+                    // Count the number of elements, need to know if the list is empty
+                    // Did not have any success testing for a any empty list in other ways
+                    var elemcount = 0;
+                    $.each(data, function(key, element) {
+                        $('#building_id').append("<option value='" + key +"'>" + element + "</option>");
+                        elemcount = elemcount + 1;
+                    });
+                    // Update the list for either No elements or a valid list of new elements
+                    if (elemcount < 1){
+                        // Clear all AND force a value of Nothing
+                        $('#building_id')
+                            .find('option')
+                            .remove()
+                            .end()
+                            .append('<option values="None">Nothing to select</option>')
+                            .val('Nothing to select')
+                            .change()
+                            .refresh()
+                        ;
+                    } else{
+                        // Sets Value to First in List (this fails if list is empty)
+                        $("option:first").attr("selected", "selected");
+                        $('#building_id').selectedIndex=0;
+                        $('#building_id').change();
+                        $('#building_id').refresh();
+                    }
+                });
+        });
+
+        // BUILDING
+        $('#building_id').change(function(){
+            // Set up the Select Change (Buildings) to update Rooms List
+            $.get("{{ url('api/dropdownRM')}}",
+                { option: $(this).val() },
+                function(data) {
+                    //alert("TESTING Set of List - BLDG !!!!");
+                    $('#room_id').empty();
+                    $.each(data, function(key, element) {
+                        $('#room_id').append("<option value='" + key +"'>" + element + "</option>");
+                    });
+                });
+        });
+    });
+</script>
+
 @stop
