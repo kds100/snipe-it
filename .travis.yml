@@ -17,8 +17,7 @@ before_script:
   - curl -s http://getcomposer.org/installer | php
   - cp app/config/production/database.example.php app/config/database.php
   - cp app/config/production/mail.example.php app/config/mail.php
-  - php composer.phar self-update
-  - php composer.phar install --prefer-source --no-interaction --dev
+  - composer install --prefer-source --no-interaction --dev
   - php artisan key:generate
   - php artisan migrate:install
   - php artisan migrate --package cartalyst/sentry
@@ -31,4 +30,5 @@ script: phpunit
 
 # configure notifications (email, IRC, campfire etc)
 notifications:
-  slack: snipe:F6LWbfP6vhr3aRBoeARFG6Ti
+  slack:
+    secure: vv9we1RxB9RsrMbomSdq6D7vz/okobw87pEkgIZjB+hj1QpQ2by90gsPsOa+NgsJEFaEP7e4KlT6SH8kK+zhbmuKaUd3d1//XdcancE22LZXi6tkiB5yuR/Jhhb1LLDqyGJTB4D92hMnnCPiUjpxNA3r437ttNeYRdYIEEP3drA=

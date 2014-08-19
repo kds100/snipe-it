@@ -11,8 +11,7 @@ class Elegant extends Eloquent
         $v = Validator::make($data, $this->rules);
 
         // check for failure
-        if ($v->fails())
-        {
+        if ($v->fails()) {
             // set errors and return false
             $this->errors = $v->errors();
             return false;
@@ -26,4 +25,9 @@ class Elegant extends Eloquent
     {
         return $this->errors;
     }
+    
+    public function validationRules($id = '0')
+    {
+        return str_replace("{id}", $id, $this->rules);
+    } 
 }
